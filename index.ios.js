@@ -9,7 +9,8 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableHighlight
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -36,6 +37,7 @@ export default class AwesomeProject extends Component {
     }
     this.onRegionChange = this.onRegionChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
+    this.buttonClicked = this.buttonClicked.bind(this);
   }
 
   onRegionChange(region) {
@@ -49,7 +51,9 @@ export default class AwesomeProject extends Component {
     this.setState({markers:[...this.state.markers, {latlng: {latitude: lat, longitude: lng}, title: "added some shit", description: "ye ye ye"}]  })
   }
 
-
+  buttonClicked() {
+    console.log("this worked");
+  }
 
   render() {
     return (
@@ -69,7 +73,10 @@ export default class AwesomeProject extends Component {
                   />
                 ))}
               </MapView>
-
+              <TouchableHighlight
+                onPress = {this.buttonClicked}>
+                  <Text>Get Routes</Text>
+              </TouchableHighlight>
           </View>
     );
   }
@@ -98,6 +105,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 30,
   },
+
 });
 
 AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
