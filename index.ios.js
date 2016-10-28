@@ -9,7 +9,8 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -35,51 +36,39 @@ export default class AwesomeProject extends Component {
       ]
     }
     this.onRegionChange = this.onRegionChange.bind(this);
+    this.handlePress = this.handlePress.bind(this);
   }
-
-  // getInitialState() {
-  //   return {
-  //     region: {
-  //       latitude: 37.78825,
-  //       longitude: -122.4324,
-  //       latitudeDelta: 0.0922,
-  //       longitudeDelta: 0.0421,
-  //     },
-  //   };
-  // }
 
   onRegionChange(region) {
     this.setState({ region });
   }
 
+  handlePress(info) {
+    console.log(info.nativeEvent.coordinate);
+  }
+
   render() {
     return (
-        // <div id="map"></div>
-        // <View>
-          // <MapView
-          // style={ styles.map }
-          //   initialRegion={{
-          //     latitude: 37.78825,
-          //     longitude: -122.4324,
-          //     latitudeDelta: 0.0922,
-          //     longitudeDelta: 0.0421,
-          //   }}
-          // />
-          <MapView
-            style={ styles.map }
-            region={this.state.region}
-            onRegionChange={this.onRegionChange}
-          >
-            {this.state.markers.map(marker => (
-              <MapView.Marker
-                coordinate={marker.latlng}
-                title={marker.title}
-                description={marker.description}
-              />
-            ))}
-          </MapView>
-          // <Text>Test</Text>
-        // </View>
+      // <View>
+          // <TouchableOpacity
+          // onPress={this.handlePress}
+          // >
+              <MapView
+                style={ styles.map }
+                region={this.state.region}
+                onRegionChange={this.onRegionChange}
+                onPress={this.handlePress}
+              >
+                {this.state.markers.map(marker => (
+                  <MapView.Marker
+                    coordinate={marker.latlng}
+                    title={marker.title}
+                    description={marker.description}
+                  />
+                ))}
+              </MapView>
+          // </TouchableOpacity>
+          // </View>
     );
   }
 }
