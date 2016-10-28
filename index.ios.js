@@ -9,8 +9,7 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View,
-  TouchableOpacity
+  View
 } from 'react-native';
 import MapView from 'react-native-maps';
 
@@ -50,58 +49,54 @@ export default class AwesomeProject extends Component {
     this.setState({markers:[...this.state.markers, {latlng: {latitude: lat, longitude: lng}, title: "added some shit", description: "ye ye ye"}]  })
   }
 
+
+
   render() {
     return (
-      // <View>
-          // <TouchableOpacity
-          // onPress={this.handlePress}
-          // >
+        <View style={styles.container}>
               <MapView
                 style={ styles.map }
                 region={this.state.region}
                 onRegionChange={this.onRegionChange}
                 onPress={this.handlePress}
               >
-                {this.state.markers.map(marker => (
+                {this.state.markers.map((marker, index) => (
                   <MapView.Marker
                     coordinate={marker.latlng}
                     title={marker.title}
                     description={marker.description}
+                    key={index}
                   />
                 ))}
               </MapView>
-          // </TouchableOpacity>
-          // </View>
+
+          </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+    },
   welcome: {
     fontSize: 20,
     textAlign: 'center',
-    margin: 10,
+    margin: 10
   },
   instructions: {
     textAlign: 'center',
     color: '#333333',
-    marginBottom: 5,
+    marginBottom: 5
   },
   map: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 30,
   },
 });
 
