@@ -26,7 +26,9 @@ export default class AwesomeProject extends Component {
       },
       markers: [
 
-      ]
+      ],
+      showRoute: false,
+      polyLines: []
     }
     this.onRegionChange = this.onRegionChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
@@ -63,7 +65,7 @@ export default class AwesomeProject extends Component {
         // console.log(stepsAry);
         var polylines = stepsAry.map(step => step.polyline.points)
         console.log(polylines);
-
+        this.setState({showRoute: true, polyLines: polylines})
       })
       .catch((error) => {
         console.error(error);
@@ -87,6 +89,7 @@ export default class AwesomeProject extends Component {
   }
 
   render() {
+    console.log(this.state.showRoute);
     return (
         <View style={styles.container}>
               <MapView
@@ -103,6 +106,7 @@ export default class AwesomeProject extends Component {
                     key={index}
                   />
                 ))}
+                <MapView.Polyline coordinates={[{latitude: 37.78825, longitude: -122.4324}, {latitude: 40.78825, longitude: -125.4324}]}/>
               </MapView>
               <View
                 style = {styles.button}>
