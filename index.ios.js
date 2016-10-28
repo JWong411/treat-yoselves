@@ -88,7 +88,7 @@ export default class AwesomeProject extends Component {
     })
     var waypoints = waypointsAry.join('|')
 
-    var url = ["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", destination, "&waypoints=", waypoints, "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"].join('');
+    var url = ["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", destination, "&waypoints=", waypoints, "&travel_mode=WALKING", "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"].join('');
     // "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination" + destination + "&waypoints" + waypoints + "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"
     return url;
   }
