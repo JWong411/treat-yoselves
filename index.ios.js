@@ -45,6 +45,9 @@ export default class AwesomeProject extends Component {
 
   handlePress(info) {
     console.log(info.nativeEvent.coordinate);
+    var lat = info.nativeEvent.coordinate.latitude
+    var lng = info.nativeEvent.coordinate.longitude
+    this.setState({markers:[...this.state.markers, {latlng: {latitude: lat, longitude: lng}, title: "added some shit", description: "ye ye ye"}]  })
   }
 
   render() {
