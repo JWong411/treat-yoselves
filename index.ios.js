@@ -13,6 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 import MapView from 'react-native-maps';
+var polyDecode = require('polyline');
 
 export default class AwesomeProject extends Component {
   constructor(){
@@ -28,7 +29,7 @@ export default class AwesomeProject extends Component {
 
       ],
       showRoute: false,
-      polyLines: []
+      coords: []
     }
     this.onRegionChange = this.onRegionChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
@@ -65,7 +66,11 @@ export default class AwesomeProject extends Component {
         // console.log(stepsAry);
         var polylines = stepsAry.map(step => step.polyline.points)
         console.log(polylines);
-        this.setState({showRoute: true, polyLines: polylines})
+        coordinates = []
+        polylines.forEach(poly => {
+          polyDecode.decode(poly).forEach(coords => coordinates.push({latitude: coords[0], longitude: coords[1]}))
+        })
+        this.setState({showRoute: true, coords: coordinates})
       })
       .catch((error) => {
         console.error(error);
@@ -89,6 +94,11 @@ export default class AwesomeProject extends Component {
   }
 
   render() {
+    if (this.state.showRoute) {
+      var polyCoords = this.state.coords
+    } else {
+      var polyCoords = [{latitude: 37.78825,longitude: -122.4324}, {latitude: 38.78825,longitude: -123.4324}]
+    }
     console.log(this.state.showRoute);
     return (
         <View style={styles.container}>
@@ -106,7 +116,7 @@ export default class AwesomeProject extends Component {
                     key={index}
                   />
                 ))}
-                <MapView.Polyline coordinates={[{latitude: 37.78825, longitude: -122.4324}, {latitude: 40.78825, longitude: -125.4324}]}/>
+                <MapView.Polyline coordinates={polyCoords}/>
               </MapView>
               <View
                 style = {styles.button}>
