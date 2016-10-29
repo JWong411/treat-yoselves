@@ -97,7 +97,7 @@ export default class AwesomeProject extends Component {
     if (this.state.showRoute) {
       var polyCoords = this.state.coords
     } else {
-      var polyCoords = [{latitude: 37.78825,longitude: -122.4324}, {latitude: 38.78825,longitude: -123.4324}]
+      var polyCoords = [{latitude: 37.78825,longitude: -122.4324}, {latitude: 37.78826,longitude: -122.4325}]
     }
     console.log(this.state.showRoute);
     return (
