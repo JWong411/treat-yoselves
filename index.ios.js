@@ -32,7 +32,9 @@ export default class AwesomeProject extends Component {
       coords: [],
       showLogin: true,
       user: {
-          username: ""
+          username: "",
+          email: "",
+          password: ""
       }
     }
 
@@ -40,8 +42,10 @@ export default class AwesomeProject extends Component {
     this.handlePress = this.handlePress.bind(this);
     this.buttonClicked = this.buttonClicked.bind(this);
     this.createURL = this.createURL.bind(this);
-    this.handleInput = this.handleInput.bind(this);
     this.registerUser = this.registerUser.bind(this);
+    this.updateUsername = this.updateUsername.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
+    this.updatePassword = this.updatePassword.bind(this);
   }
 
   onRegionChange(region) {
@@ -49,7 +53,6 @@ export default class AwesomeProject extends Component {
   }
 
   handlePress(info) {
-    // console.log(info.nativeEvent.coordinate);
     var lat = info.nativeEvent.coordinate.latitude
     var lng = info.nativeEvent.coordinate.longitude
     this.setState({markers:[...this.state.markers, {latlng: {latitude: lat, longitude: lng}, title: "added some shit", description: "ye ye ye"}]  })
@@ -99,13 +102,39 @@ export default class AwesomeProject extends Component {
     return url;
   }
 
-  handleInput(input) {
-      console.log(input)
-      this.setState({user: {username: input}})
+  registerUser() {
+      let userRegisterURL = "http://localhost:3000/users"
+      console.log(this.state)
+      let data = this.state.user
+
+      fetch(userRegisterURL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user: data
+        })
+      })
   }
 
-  registerUser() {
-      debugger;
+  updateUsername(input) {
+      let newState = this.state
+      newState.user.username = input
+      this.setState(newState)
+  }
+
+  updateEmail(input) {
+      let newState = this.state
+      newState.user.email = input
+      this.setState(newState)
+  }
+
+  updatePassword(input) {
+      let newState = this.state
+      newState.user.password = input
+      this.setState(newState)
   }
 
   render() {
@@ -118,14 +147,13 @@ export default class AwesomeProject extends Component {
     if (this.state.showLogin) {
         return (
             <View style={styles.container}>
-                <Text>Hello hello =D</Text>
-                <TextInput style={styles.input} onChangeText={this.handleInput} placeholder="Username" />
-                <View style={styles.submit}>
-                    <TouchableHighlight
-                      onPress = {this.registerUser}>
-                        <Text>Register</Text>
-                    </TouchableHighlight>
-                </View>
+                <Text>Hello hello, c'mon and register =D</Text>
+                <TextInput style={styles.input} onChangeText={this.updateUsername} placeholder="  Username" />
+                <TextInput style={styles.input} onChangeText={this.updateEmail} placeholder="  Email" />
+                <TextInput style={styles.input} onChangeText={this.updatePassword} placeholder="  Password" />
+                <TouchableHighlight onPress = {this.registerUser} style={styles.submit}>
+                    <Text>Register</Text>
+                </TouchableHighlight>
             </View>
         );
     } else {
@@ -190,13 +218,15 @@ const styles = StyleSheet.create({
   input:{
       position: 'relative',
       left: 100,
+      margin: 5,
       height: 40,
       width: 200,
       borderColor: 'skyblue',
       borderWidth: 1,
   },
   submit:{
-
+      backgroundColor: 'skyblue',
+      margin: 4,
   },
 });
 
