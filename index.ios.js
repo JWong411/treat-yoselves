@@ -30,7 +30,10 @@ export default class AwesomeProject extends Component {
       ],
       showRoute: false,
       coords: [],
-      showLogin: true
+      showLogin: true,
+      user: {
+          username: ""
+      }
     }
 
     this.onRegionChange = this.onRegionChange.bind(this);
@@ -38,6 +41,7 @@ export default class AwesomeProject extends Component {
     this.buttonClicked = this.buttonClicked.bind(this);
     this.createURL = this.createURL.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.registerUser = this.registerUser.bind(this);
   }
 
   onRegionChange(region) {
@@ -92,12 +96,16 @@ export default class AwesomeProject extends Component {
     var waypoints = waypointsAry.join('|')
 
     var url = ["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", destination, "&waypoints=", waypoints, "&travel_mode=WALKING", "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"].join('');
-    // "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination" + destination + "&waypoints" + waypoints + "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"
     return url;
   }
 
   handleInput(input) {
       console.log(input)
+      this.setState({user: {username: input}})
+  }
+
+  registerUser() {
+      debugger;
   }
 
   render() {
@@ -111,10 +119,13 @@ export default class AwesomeProject extends Component {
         return (
             <View style={styles.container}>
                 <Text>Hello hello =D</Text>
-                <TextInput
-                  style={styles.input}
-                  onChangeText={this.handleInput}
-                />
+                <TextInput style={styles.input} onChangeText={this.handleInput} placeholder="Username" />
+                <View style={styles.submit}>
+                    <TouchableHighlight
+                      onPress = {this.registerUser}>
+                        <Text>Register</Text>
+                    </TouchableHighlight>
+                </View>
             </View>
         );
     } else {
@@ -177,12 +188,15 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   input:{
-      position: 'absolute',
+      position: 'relative',
       left: 100,
       height: 40,
       width: 200,
       borderColor: 'skyblue',
       borderWidth: 1,
+  },
+  submit:{
+
   },
 });
 
