@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native';
 import MapView from 'react-native-maps';
 var polyDecode = require('polyline');
@@ -26,15 +27,25 @@ export default class AwesomeProject extends Component {
         longitudeDelta: 0.0421,
       },
       markers: [
-
       ],
       showRoute: false,
-      coords: []
+      coords: [],
+      showLogin: true,
+      user: {
+          username: "",
+          email: "",
+          password: ""
+      }
     }
+
     this.onRegionChange = this.onRegionChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.buttonClicked = this.buttonClicked.bind(this);
     this.createURL = this.createURL.bind(this);
+    this.registerUser = this.registerUser.bind(this);
+    this.updateUsername = this.updateUsername.bind(this);
+    this.updateEmail = this.updateEmail.bind(this);
+    this.updatePassword = this.updatePassword.bind(this);
   }
 
   onRegionChange(region) {
@@ -42,7 +53,6 @@ export default class AwesomeProject extends Component {
   }
 
   handlePress(info) {
-    // console.log(info.nativeEvent.coordinate);
     var lat = info.nativeEvent.coordinate.latitude
     var lng = info.nativeEvent.coordinate.longitude
     this.setState({markers:[...this.state.markers, {latlng: {latitude: lat, longitude: lng}, title: "added some shit", description: "ye ye ye"}]  })
@@ -89,8 +99,48 @@ export default class AwesomeProject extends Component {
     var waypoints = waypointsAry.join('|')
 
     var url = ["https://maps.googleapis.com/maps/api/directions/json?origin=", origin, "&destination=", destination, "&waypoints=", waypoints, "&travel_mode=WALKING", "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"].join('');
-    // "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination" + destination + "&waypoints" + waypoints + "&key=AIzaSyBF4ErRr95eWjXbhMKD5ot1kmmetfa2Umk"
     return url;
+  }
+
+  registerUser() {
+      let userRegisterURL = "http://localhost:3000/users"
+    //   console.log(this.state)
+      let data = this.state.user
+
+      fetch(userRegisterURL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user: data
+        })
+      })
+        .then((response) => response.json())
+        .then((jsonResponse) => console.log(jsonResponse))
+        .catch((error) => {
+          console.log("oh nooo's")
+          console.error(error);
+        })
+  }
+
+  updateUsername(input) {
+      let newState = this.state
+      newState.user.username = input
+      this.setState(newState)
+  }
+
+  updateEmail(input) {
+      let newState = this.state
+      newState.user.email = input
+      this.setState(newState)
+  }
+
+  updatePassword(input) {
+      let newState = this.state
+      newState.user.password = input
+      this.setState(newState)
   }
 
   render() {
@@ -100,33 +150,47 @@ export default class AwesomeProject extends Component {
       var polyCoords = [{latitude: 37.78825,longitude: -122.4324}, {latitude: 37.78826,longitude: -122.4325}]
     }
     console.log(this.state.showRoute);
-    return (
-        <View style={styles.container}>
-              <MapView
-                style={ styles.map }
-                region={this.state.region}
-                onRegionChange={this.onRegionChange}
-                onPress={this.handlePress}
-              >
-                {this.state.markers.map((marker, index) => (
-                  <MapView.Marker
-                    coordinate={marker.latlng}
-                    title={marker.title}
-                    description={marker.description}
-                    key={index}
-                  />
-                ))}
-                <MapView.Polyline coordinates={polyCoords}/>
-              </MapView>
-              <View
-                style = {styles.button}>
-                <TouchableHighlight
-                  onPress = {this.buttonClicked}>
-                    <Text>Get Routes</Text>
+    if (this.state.showLogin) {
+        return (
+            <View style={styles.container}>
+                <Text>Hello hello, c'mon and register =D</Text>
+                <TextInput style={styles.input} onChangeText={this.updateUsername} placeholder="  Username" />
+                <TextInput style={styles.input} onChangeText={this.updateEmail} placeholder="  Email" />
+                <TextInput style={styles.input} onChangeText={this.updatePassword} placeholder="  Password" />
+                <TouchableHighlight onPress = {this.registerUser} style={styles.submit}>
+                    <Text>Register</Text>
                 </TouchableHighlight>
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.container}>
+                  <MapView
+                    style={ styles.map }
+                    region={this.state.region}
+                    onRegionChange={this.onRegionChange}
+                    onPress={this.handlePress}
+                  >
+                    {this.state.markers.map((marker, index) => (
+                      <MapView.Marker
+                        coordinate={marker.latlng}
+                        title={marker.title}
+                        description={marker.description}
+                        key={index}
+                      />
+                    ))}
+                    <MapView.Polyline coordinates={polyCoords}/>
+                  </MapView>
+                  <View
+                    style = {styles.button}>
+                    <TouchableHighlight
+                      onPress = {this.buttonClicked}>
+                        <Text>Get Routes</Text>
+                    </TouchableHighlight>
+                  </View>
               </View>
-          </View>
-    );
+          );
+    }
   }
 }
 
@@ -156,6 +220,19 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 0,
+  },
+  input:{
+      position: 'relative',
+      left: 100,
+      margin: 5,
+      height: 40,
+      width: 200,
+      borderColor: 'skyblue',
+      borderWidth: 1,
+  },
+  submit:{
+      backgroundColor: 'skyblue',
+      margin: 4,
   },
 });
 
