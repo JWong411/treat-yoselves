@@ -104,7 +104,7 @@ export default class AwesomeProject extends Component {
 
   registerUser() {
       let userRegisterURL = "http://localhost:3000/users"
-      console.log(this.state)
+    //   console.log(this.state)
       let data = this.state.user
 
       fetch(userRegisterURL, {
@@ -117,6 +117,12 @@ export default class AwesomeProject extends Component {
           user: data
         })
       })
+        .then((response) => response.json())
+        .then((jsonResponse) => console.log(jsonResponse))
+        .catch((error) => {
+          console.log("oh nooo's")
+          console.error(error);
+        })
   }
 
   updateUsername(input) {
