@@ -10,7 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  TextInput
 } from 'react-native';
 import MapView from 'react-native-maps';
 var polyDecode = require('polyline');
@@ -26,15 +27,17 @@ export default class AwesomeProject extends Component {
         longitudeDelta: 0.0421,
       },
       markers: [
-
       ],
       showRoute: false,
-      coords: []
+      coords: [],
+      showLogin: true
     }
+
     this.onRegionChange = this.onRegionChange.bind(this);
     this.handlePress = this.handlePress.bind(this);
     this.buttonClicked = this.buttonClicked.bind(this);
     this.createURL = this.createURL.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
 
   onRegionChange(region) {
@@ -93,6 +96,10 @@ export default class AwesomeProject extends Component {
     return url;
   }
 
+  handleInput(input) {
+      console.log(input)
+  }
+
   render() {
     if (this.state.showRoute) {
       var polyCoords = this.state.coords
@@ -100,33 +107,45 @@ export default class AwesomeProject extends Component {
       var polyCoords = [{latitude: 37.78825,longitude: -122.4324}, {latitude: 37.78826,longitude: -122.4325}]
     }
     console.log(this.state.showRoute);
-    return (
-        <View style={styles.container}>
-              <MapView
-                style={ styles.map }
-                region={this.state.region}
-                onRegionChange={this.onRegionChange}
-                onPress={this.handlePress}
-              >
-                {this.state.markers.map((marker, index) => (
-                  <MapView.Marker
-                    coordinate={marker.latlng}
-                    title={marker.title}
-                    description={marker.description}
-                    key={index}
-                  />
-                ))}
-                <MapView.Polyline coordinates={polyCoords}/>
-              </MapView>
-              <View
-                style = {styles.button}>
-                <TouchableHighlight
-                  onPress = {this.buttonClicked}>
-                    <Text>Get Routes</Text>
-                </TouchableHighlight>
+    if (this.state.showLogin) {
+        return (
+            <View style={styles.container}>
+                <Text>Hello hello =D</Text>
+                <TextInput
+                  style={styles.input}
+                  onChangeText={this.handleInput}
+                />
+            </View>
+        );
+    } else {
+        return (
+            <View style={styles.container}>
+                  <MapView
+                    style={ styles.map }
+                    region={this.state.region}
+                    onRegionChange={this.onRegionChange}
+                    onPress={this.handlePress}
+                  >
+                    {this.state.markers.map((marker, index) => (
+                      <MapView.Marker
+                        coordinate={marker.latlng}
+                        title={marker.title}
+                        description={marker.description}
+                        key={index}
+                      />
+                    ))}
+                    <MapView.Polyline coordinates={polyCoords}/>
+                  </MapView>
+                  <View
+                    style = {styles.button}>
+                    <TouchableHighlight
+                      onPress = {this.buttonClicked}>
+                        <Text>Get Routes</Text>
+                    </TouchableHighlight>
+                  </View>
               </View>
-          </View>
-    );
+          );
+    }
   }
 }
 
@@ -156,6 +175,14 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 0,
+  },
+  input:{
+      position: 'absolute',
+      left: 100,
+      height: 40,
+      width: 200,
+      borderColor: 'skyblue',
+      borderWidth: 1,
   },
 });
 
